@@ -13,7 +13,7 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 """
 
 data = open("data.csv", "r").readlines()
-lines = [row.split(",") for row in data]
+lines = [row.split("\t") for row in data]
 
 
 def pregunta_01():
@@ -44,7 +44,13 @@ def pregunta_02():
     ]
 
     """
-    return
+    registers_per_letter = {}
+    for line in lines:
+        if line[0] in registers_per_letter:
+            registers_per_letter[line[0]] += 1
+        else:
+            registers_per_letter[line[0]] = 1
+    return sorted(list(registers_per_letter.items()))
 
 
 def pregunta_03():
@@ -62,7 +68,13 @@ def pregunta_03():
     ]
 
     """
-    return
+    registers_per_letter = {}
+    for line in lines:
+        if line[0] in registers_per_letter:
+            registers_per_letter[line[0]] += int(line[1])
+        else:
+            registers_per_letter[line[0]] = int(line[1])
+    return sorted(list(registers_per_letter.items()))
 
 
 def pregunta_04():
@@ -87,7 +99,14 @@ def pregunta_04():
     ]
 
     """
-    return
+    months = [line[2].split("-")[1] for line in lines]
+    registers_per_month = {}
+    for month in months:
+        if month in registers_per_month:
+            registers_per_month[month] += 1
+        else:
+            registers_per_month[month] = 1
+    return sorted(list(registers_per_month.items()))
 
 
 def pregunta_05():
@@ -105,7 +124,17 @@ def pregunta_05():
     ]
 
     """
-    return
+
+    registers_per_letter = {}
+    for line in lines:
+        if line[0] in registers_per_letter:
+            if int(line[1]) > registers_per_letter[line[0]][1]:
+                registers_per_letter[line[0]][1] = int(line[1])
+            if int(line[1]) < registers_per_letter[line[0]][2]:
+                registers_per_letter[line[0]][2] = int(line[1])
+        else:
+            registers_per_letter[line[0]] = [line[0], int(line[1]), int(line[1])]
+    return [tuple(x[1]) for x in sorted(list(registers_per_letter.items()))]
 
 
 def pregunta_06():
