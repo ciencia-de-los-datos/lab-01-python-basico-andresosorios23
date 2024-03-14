@@ -159,7 +159,18 @@ def pregunta_06():
     ]
 
     """
-    return
+    registers_per_key = {}
+    for line in lines:
+        keys = line[4].replace("\n", "").split(",")
+        for key in keys:
+            if key[:3] in registers_per_key:
+                if int(key[4:]) > registers_per_key[key[:3]][1]:
+                    registers_per_key[key[:3]][1] = int(key[4:])
+                if int(key[4:]) < registers_per_key[key[:3]][0]:
+                    registers_per_key[key[:3]][0] = int(key[4:])
+            else:
+                registers_per_key[key[:3]] = [int(key[4:]), int(key[4:])]
+    return [(x[0], x[1][0], x[1][1]) for x in list(sorted(registers_per_key.items()))]
 
 
 def pregunta_07():
@@ -183,7 +194,13 @@ def pregunta_07():
     ]
 
     """
-    return
+    letters_per_number: dict[int, list[str]] = {}
+    for line in lines:
+        if int(line[1]) in letters_per_number:
+            letters_per_number[int(line[1])].append(line[0])
+        else:
+            letters_per_number[int(line[1])] = [line[0]]
+    return list(sorted(letters_per_number.items()))
 
 
 def pregunta_08():
@@ -208,7 +225,16 @@ def pregunta_08():
     ]
 
     """
-    return
+
+    letters_per_number: dict[int, list[str]] = {}
+    for line in lines:
+        if int(line[1]) in letters_per_number:
+            letters_per_number[int(line[1])].append(line[0])
+        else:
+            letters_per_number[int(line[1])] = [line[0]]
+    for key in letters_per_number:
+        letters_per_number[key] = sorted(list(set(letters_per_number[key])))
+    return list(sorted(letters_per_number.items()))
 
 
 def pregunta_09():
@@ -231,7 +257,15 @@ def pregunta_09():
     }
 
     """
-    return
+    registers_per_key = {}
+    for line in lines:
+        keys = line[4].replace("\n", "").split(",")
+        for key in keys:
+            if key[:3] in registers_per_key:
+                registers_per_key[key[:3]] += 1
+            else:
+                registers_per_key[key[:3]] = 1
+    return dict(sorted(registers_per_key.items()))
 
 
 def pregunta_10():
@@ -252,10 +286,12 @@ def pregunta_10():
 
 
     """
-    return
+    return [
+        (line[0], len(line[3].split(",")), len(line[4].split(","))) for line in lines
+    ]
 
 
-def pregunta_11():
+def pregunta_11() -> dict[str, int]:
     """
     Retorne un diccionario que contengan la suma de la columna 2 para cada letra de la
     columna 4, ordenadas alfabeticamente.
@@ -273,10 +309,14 @@ def pregunta_11():
 
 
     """
-    return
+    result: dict[str, int] = {
+        letter: sum([int(line[1]) for line in lines if letter in line[3]])
+        for letter in "abcdefg"
+    }
+    return result
 
 
-def pregunta_12():
+def pregunta_12() -> dict[str, int]:
     """
     Genere un diccionario que contengan como clave la columna 1 y como valor la suma de
     los valores de la columna 5 sobre todo el archivo.
@@ -291,4 +331,10 @@ def pregunta_12():
     }
 
     """
-    return
+    result: dict[str, int] = {}
+    for line in lines:
+        if line[0] in result:
+            result[line[0]] += sum([int(x[4:]) for x in line[4].split(",")])
+        else:
+            result[line[0]] = sum([int(x[4:]) for x in line[4].split(",")])
+    return result
